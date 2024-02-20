@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+    stages {
+        stage('clone'){
+            steps {
+                git branch: 'webjokes'
+                url: '<URL>'
+                
+            }
+        }
+        stage('build'){
+            steps {
+                sh '''
+                docker build -t webjokes:${BUILD_NUMBER}
+                '''
+            }
+        }
+        stage('test'){
+            steps {
+                sh '''
+                docker run -it webjokes:${BUILD_NUMBER}
+                curl localhost:5000
+                '''
+            }
+        }
+        stage('package'){
+            steps {
+                sh '''
+                docker push salimsaidhemed1989/webjokes:${BUILD_NUMBER}
+                '''
+            }
+        }
+        stage('deploy'){
+            steps {
+                sh 'echo deploy'
+            }
+        }
+
+    }
+}

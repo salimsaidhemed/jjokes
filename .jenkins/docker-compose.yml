@@ -4,11 +4,16 @@ volumes:
   jenkins-data:
   jenkins-docker-certs:
 
+networks:
+  jenkins:
+
 services:
-  jekins:
+  jenkins:
     image: jenkins/jenkins
     ports:
       - 8088:8080
     volumes:
       - jenkins-data:/var/jenkins_home
       - jenkins-docker-certs:/certs/client
+    networks:
+      - jenkins
